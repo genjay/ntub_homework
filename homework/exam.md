@@ -1,11 +1,23 @@
 ## 基本觀念 (共 6 題，每題 7 分，共 42 分，視答題結果部份給分)
 
 * 你為什麼會喜歡 Ruby ? 你之前是否有其它程式語言的開發經驗? 從其它程式語言轉到 Ruby 之後，覺得最大的差別是什麼?
+* ruby 可以簡單快速寫出想要的東西,ruby 內所有東西都是物件，還有他可以複蓋code
 * 在學習 Ruby 的過程中，遇到覺得最難的地方是什麼?
+* 他的括號可以省略，讓我很難搞懂他為什麼可以運作，但是熟了之後，卻又不排斥這功能
 * Git 指令中的 `git clone` 跟 `git pull` 有什麼差別?
+* git clone 是把專案整個複制回來
+* git pull 是用在已複制回專案，同步最新的程式回來
 * Ruby 裡的常數跟變數有什麼不同?
+* 第一個字母大寫，就是常數，在ruby 內，常數可以改變
+* 變數，就是隋時可以變，用來儲存運算時需要用到的值
+* 
 * 請問 `{ name: "eddie", age: 19 }` 跟 `{ :name => "eddie", :age => 19 }` 這兩種 Hash 的寫法有什麼差別?
+* 這二懂寫法都一樣，前種是後期增加的寫法，類似json
+* 
 * 請簡述 Ruby 裡 public、protected 與 private 方法的差別
+* public 是用來宣告class 內，可以直接使用的methods
+* protected,private 無法直接使用，需要在class 內對他做呼叫
+* 這二種的差別是在使用繼承或mixin 時，有一個不能被使用
 
 ## 實作題 (共 2 題，共 25 分)
 
@@ -23,7 +35,14 @@ end
 
 puts bmi_calculator(178, 70)
 ```
+```ruby
+def bmi_calculator(height, weight) 
+  bmi = weight / ((height.to_f/100)**2)
+  bmi.round(2)
+end
 
+puts bmi_calculator(178, 70)
+```
 BMI 的計算公式：BMI 值 = 體重(單位：公斤) / 身高平方(單位：公尺)
 
 輸入身高 178 公分，體重 70 公斤，期望得到答案 = 22.09 (四捨五入到小數點以下第 2 位)，請完成方法的實作內容
@@ -34,11 +53,27 @@ BMI 的計算公式：BMI 值 = 體重(單位：公斤) / 身高平方(單位：
 
 ```ruby
 class Movie
-  # ... 實作
+  attr_accessor :name,:price
+  def initialize name,price
+    @name= name
+    @price= price
+  end
 end
 
 class Rental
-  # ... 實作
+  def initialize *obj
+    @ids||=[]
+  end
+  def add_movie(obj)
+    @ids<< obj
+  end
+  def summary
+    sum||= 0 
+    @ids.each do |i|
+      sum +=i.price
+    end
+    puts "「你總共租了 #{@ids.count} 部電影，消費金額為 #{sum} 元」"
+  end
 end
 
 dragon_ball = Movie.new("七龍珠", 100)  # 租金 = 100 塊
@@ -48,7 +83,8 @@ rental = Rental.new
 rental.add_movie(dragon_ball)
 rental.add_movie(naruto)
 puts rental.summary
-```
+``` 
+    
 
 最後一行印出結果的時候，你期望結果會印出「你總共租了 2 部電影，消費金額為 180 元」，請完成中間的實作內容。
 
@@ -70,6 +106,12 @@ end
 puts result
 ```
 
+```ruby
+result = 0
+[*1..100].each {|i| result += i }
+puts result
+```
+
 #### 第 2 題
 
 ```ruby
@@ -82,6 +124,14 @@ end
 puts profile[:company]  # 得到「五倍紅寶石」字樣
 ```
 
+```ruby
+profile = {name: "john"}
+profile[:company] ||= "五倍紅寶石"
+
+puts profile[:company]  
+```
+
+
 #### 第 3 題
 
 ```ruby
@@ -93,6 +143,14 @@ end
 p result    # => [2, 4, 6, 8, 10]
 ```
 
+```ruby
+list,result = [*1..5],[]
+list.each do |x|
+  result << x*2
+end
+p result
+
+```
 #### 第 4 題
 
 ```ruby
@@ -102,6 +160,15 @@ def is_adult?(age)
   else
     return false
   end
+end
+
+puts is_adult?(20)   # => true
+puts is_adult?(16)   # => false
+```
+
+```ruby
+def is_adult?(age)
+  (age >=18)? true:false
 end
 
 puts is_adult?(20)   # => true
@@ -121,6 +188,25 @@ class Dog
   def sleep
     puts "zzzzzZZZ"
   end
+end
+
+lucky = Dog.new
+kitty = Cat.new
+
+lucky.sleep
+kitty.sleep
+```
+```ruby
+
+class Animal
+  def sleep
+    puts "zzzzzZZZ"
+  end
+end
+
+class Cat < Animal
+end
+class Dog < Animal
 end
 
 lucky = Dog.new
